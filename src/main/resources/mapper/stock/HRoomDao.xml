@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.stock.dao.HRoomDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.stock.entity.HRoom" id="hRoomMap">
+        <result property="roomId" column="room_id"/>
+        <result property="roomName" column="room_name"/>
+        <result property="seatingCapacity" column="seating_capacity"/>
+        <result property="custodian" column="custodian"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="creator" column="creator"/>
+        <result property="modifier" column="modifier"/>
+        <result property="isValid" column="is_valid"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.stock.entity.HRoom">
+		select * from h_room where room_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.stock.entity.HRoom">
+		select * from h_room
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by room_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from h_room 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.stock.entity.HRoom" useGeneratedKeys="true" keyProperty="roomId">
+		insert into h_room
+		(
+			`room_name`, 
+			`seating_capacity`, 
+			`custodian`, 
+			`create_time`, 
+			`modify_time`, 
+			`creator`, 
+			`modifier`, 
+			`is_valid`
+		)
+		values
+		(
+			#{roomName}, 
+			#{seatingCapacity}, 
+			#{custodian}, 
+			#{createTime}, 
+			#{modifyTime}, 
+			#{creator}, 
+			#{modifier}, 
+			#{isValid}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.stock.entity.HRoom">
+		update h_room 
+		<set>
+			<if test="roomName != null">`room_name` = #{roomName}, </if>
+			<if test="seatingCapacity != null">`seating_capacity` = #{seatingCapacity}, </if>
+			<if test="custodian != null">`custodian` = #{custodian}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}, </if>
+			<if test="isValid != null">`is_valid` = #{isValid}</if>
+		</set>
+		where room_id = #{roomId}
+	</update>
+	
+	<update id="delete">
+		UPDATE h_room SET is_valid=5  where room_id = #{value}
+	</update>
+	
+	<update id="deleteBatch">
+		UPDATE  h_room SET is_valid=5  where  room_id in
+		<foreach item="roomId" collection="array" open="(" separator="," close=")">
+			#{roomId}
+		</foreach>
+	</update>
+
+	<select id="queryHRoomVoList" resultType="io.renren.modules.stock.vo.HRoomVo">
+		select hr.*,su.username AS creatorName,su2.username AS modifierName,su3.username AS custodianName from h_room hr LEFT JOIN sys_user su ON hr.creator=su.user_id LEFT JOIN sys_user su2 ON  su2.user_id=hr.modifier
+		LEFT JOIN sys_user su3 ON su3.user_id = hr.custodian
+		where hr.is_valid=4
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by hr.room_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryHRoomVoTotal" resultType="int">
+		select count(*) from h_room WHERE is_valid=4
+	</select>
+
+</mapper>

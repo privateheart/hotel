@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.HDicDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.HDic" id="hDicMap">
+        <result property="dicId" column="dic_id"/>
+        <result property="dicType" column="dic_type"/>
+        <result property="dicName" column="dic_name"/>
+        <result property="remark" column="remark"/>
+        <result property="sort" column="sort"/>
+        <result property="value" column="value"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.sys.entity.HDic">
+		select * from h_dic where dic_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.sys.entity.HDic">
+		select * from h_dic
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by dic_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from h_dic 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.sys.entity.HDic" useGeneratedKeys="true" keyProperty="dicId">
+		insert into h_dic
+		(
+			`dic_type`, 
+			`dic_name`, 
+			`remark`, 
+			`sort`, 
+			`value`
+		)
+		values
+		(
+			#{dicType}, 
+			#{dicName}, 
+			#{remark}, 
+			#{sort}, 
+			#{value}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.sys.entity.HDic">
+		update h_dic 
+		<set>
+			<if test="dicType != null">`dic_type` = #{dicType}, </if>
+			<if test="dicName != null">`dic_name` = #{dicName}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="sort != null">`sort` = #{sort}, </if>
+			<if test="value != null">`value` = #{value}</if>
+		</set>
+		where dic_id = #{dicId}
+	</update>
+	
+	<delete id="delete">
+		delete from h_dic where dic_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from h_dic where dic_id in 
+		<foreach item="dicId" collection="array" open="(" separator="," close=")">
+			#{dicId}
+		</foreach>
+	</delete>
+
+	<select id="queryHDicVoList" resultType="io.renren.modules.sys.vo.HDicVo">
+		SELECT hd.*,hdt.category_name,hdt.dic_type_id FROM h_dic hd LEFT JOIN h_dic_type hdt ON hd.dic_type=hdt.dic_type_id
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by hd.dic_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="queryAllDicVos" resultType="io.renren.modules.sys.vo.HDicVo">
+		SELECT hd.*,hdt.category_name,hdt.dic_type_id FROM h_dic hd LEFT JOIN h_dic_type hdt ON hd.dic_type=hdt.dic_type_id
+	</select>
+</mapper>

@@ -1,0 +1,30 @@
+package io.renren.modules.workflow.dao;
+
+import io.renren.modules.workflow.entity.WfLog;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+
+/**
+ * Created by szj_pc on 2017/8/31.
+ */
+@Mapper
+public interface WfLogDao {
+
+    @Insert("INSERT INTO util_wf_wflog(WFID,FROMOPERATORID,FROMOPERATORNAME,FROMOPERATORORG,FROMOPERATORPOS,PREACITONID,PREACTIONNAME,PREACTIONTYPE,PREACTIONNOTES,PRECOMMITTIME,NODEID,NODENAME,NODETYPE,OPERATORID,OPERATORNAME,OPERATORORG,OPERATORPOS,HAVEMULTIOPERATOR,LIMITDATE,PREWFLOGID,NEXTWFLOGID,ISFIRSTWFLOGID,ISLASTWFLOGID)" +
+            " values(#{wfId},#{fromOperatorID},#{fromOperatorName},#{fromOperatorOrg},#{fromOperatorPos},#{preAcitonID},#{preActionName},#{preActionType},#{preActionNotes},#{preCommitTime},#{nodeID},#{nodeName},#{nodeType},#{operatorID},#{operatorName},#{operatorOrg},#{operatorPos},#{haveMultiOperator},#{limitDate},#{preWfLogID},#{nextWfLogID},#{isFirstWfLogID},#{isLastWfLogID})")
+    void saveWfLog(WfLog wfLog);
+
+    @Update("UPDATE util_wf_wflog set WFID=#{wfId},FROMOPERATORID=#{fromOperatorID},FROMOPERATORNAME=#{fromOperatorName},FROMOPERATORORG=#{fromOperatorOrg},FROMOPERATORPOS=#{fromOperatorPos},PREACITONID=#{preAcitonID},PREACTIONNAME=#{preActionName},PREACTIONTYPE=#{preActionType},PREACTIONNOTES=#{preActionNotes},PRECOMMITTIME=#{preCommitTime}," +
+            "NODEID=#{nodeID},NODENAME=#{nodeName},NODETYPE=#{nodeType},OPERATORID=#{operatorID},OPERATORNAME=#{operatorName},OPERATORORG=#{operatorOrg},OPERATORPOS=#{operatorPos},HAVEMULTIOPERATOR=#{haveMultiOperator},LIMITDATE=#{limitDate},PREWFLOGID=#{preWfLogID},NEXTWFLOGID=#{nextWfLogID},ISFIRSTWFLOGID=#{isFirstWfLogID},ISLASTWFLOGID=#{isLastWfLogID} WHERE WFLOGID=#{wfLogID}")
+    int updateWfLog(WfLog wfLog);
+
+    @Delete("DELETE FROM util_wf_wflog WHERE WFLOGID=#{wfLogID}")
+    int removeWfLog(long wfLogID);
+
+    @Select("SELECT WFLOGID,WFID,FROMOPERATORID,FROMOPERATORNAME,FROMOPERATORORG,FROMOPERATORPOS,PREACITONID,PREACTIONNAME,PREACTIONTYPE,PREACTIONNOTES,PRECOMMITTIME,NODEID,NODENAME,NODETYPE,OPERATORID,OPERATORNAME,OPERATORORG,OPERATORPOS,HAVEMULTIOPERATOR,LIMITDATE,PREWFLOGID,NEXTWFLOGID,ISFIRSTWFLOGID,ISLASTWFLOGID FROM util_wf_wflog WHERE WFLOGID=#{wfLogID}")
+    WfLog getWfLog(long wfLogID);
+
+    @Select("SELECT WFLOGID,WFID,FROMOPERATORID,FROMOPERATORNAME,FROMOPERATORORG,FROMOPERATORPOS,PREACITONID,PREACTIONNAME,PREACTIONTYPE,PREACTIONNOTES,PRECOMMITTIME,NODEID,NODENAME,NODETYPE,OPERATORID,OPERATORNAME,OPERATORORG,OPERATORPOS,HAVEMULTIOPERATOR,LIMITDATE,PREWFLOGID,NEXTWFLOGID,ISFIRSTWFLOGID,ISLASTWFLOGID FROM util_wf_wflog")
+    List<WfLog> listWfLog();
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.sys.dao.HDicTypeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.sys.entity.HDicType" id="hDicTypeMap">
+        <result property="dicTypeId" column="dic_type_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.sys.entity.HDicType">
+		select * from h_dic_type where dic_type_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.sys.entity.HDicType">
+		select * from h_dic_type
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by dic_type_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from h_dic_type 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.sys.entity.HDicType" useGeneratedKeys="true" keyProperty="dicTypeId">
+		insert into h_dic_type
+		(
+			`category_name`, 
+			`remark`
+		)
+		values
+		(
+			#{categoryName}, 
+			#{remark}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.sys.entity.HDicType">
+		update h_dic_type 
+		<set>
+			<if test="categoryName != null">`category_name` = #{categoryName}, </if>
+			<if test="remark != null">`remark` = #{remark}</if>
+		</set>
+		where dic_type_id = #{dicTypeId}
+	</update>
+	
+	<delete id="delete">
+		delete from h_dic_type where dic_type_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from h_dic_type where dic_type_id in 
+		<foreach item="dicTypeId" collection="array" open="(" separator="," close=")">
+			#{dicTypeId}
+		</foreach>
+	</delete>
+
+	<select id="queryAll" resultType="io.renren.modules.sys.entity.HDicType">
+		SELECT * FROM h_dic_type
+	</select>
+</mapper>
