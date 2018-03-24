@@ -63,4 +63,9 @@ public class HGoodsServiceImpl implements HGoodsService {
 	public int queryHGoodsVoTotal(Map<String, Object> map) {
 		return hGoodsDao.queryHGoodsVoTotal(map);
 	}
+
+    @Override
+    public List<HGoodsVo> queryAllHGoodsVoList() {
+        return hGoodsDao.queryAllHGoodsVoList();
+    }
 }

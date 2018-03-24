@@ -3,7 +3,7 @@
 
 <mapper namespace="io.renren.modules.stock.dao.HGoodsDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
+    <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="io.renren.modules.stock.entity.HGoods" id="hGoodsMap">
         <result property="goodsId" column="goods_id"/>
         <result property="goodsName" column="goods_name"/>
@@ -15,30 +15,31 @@
         <result property="modifier" column="modifier"/>
     </resultMap>
 
-	<select id="queryObject" resultType="io.renren.modules.stock.entity.HGoods">
+    <select id="queryObject" resultType="io.renren.modules.stock.entity.HGoods">
 		select * from h_goods where goods_id = #{value}
 	</select>
 
-	<select id="queryList" resultType="io.renren.modules.stock.entity.HGoods">
-		select * from h_goods WHERE is_valid=4
+    <select id="queryList" resultType="io.renren.modules.stock.entity.HGoods">
+        select * from h_goods WHERE is_valid=1
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
-			<otherwise>
+            <otherwise>
                 order by goods_id desc
-			</otherwise>
+            </otherwise>
         </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	
- 	<select id="queryTotal" resultType="int">
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
 		select count(*) from h_goods
 	</select>
-	 
-	<insert id="save" parameterType="io.renren.modules.stock.entity.HGoods" useGeneratedKeys="true" keyProperty="goodsId">
+
+    <insert id="save" parameterType="io.renren.modules.stock.entity.HGoods" useGeneratedKeys="true"
+            keyProperty="goodsId">
 		insert into h_goods
 		(
 			`goods_name`, 
@@ -60,55 +61,62 @@
 			#{modifier}
 		)
 	</insert>
-	 
-	<update id="update" parameterType="io.renren.modules.stock.entity.HGoods">
-		update h_goods 
-		<set>
-			<if test="goodsName != null">`goods_name` = #{goodsName}, </if>
-			<if test="goodsType != null">`goods_type` = #{goodsType}, </if>
-			<if test="createTime != null">`create_time` = #{createTime}, </if>
-			<if test="creator != null">`creator` = #{creator}, </if>
-			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
-			<if test="isValid != null">`is_valid` = #{isValid}, </if>
-			<if test="modifier != null">`modifier` = #{modifier}</if>
-		</set>
-		where goods_id = #{goodsId}
-	</update>
-	
-	<delete id="delete">
-		UPDATE h_goods SET is_valid=5 WHERE  goods_id=#{value}
+
+    <update id="update" parameterType="io.renren.modules.stock.entity.HGoods">
+        update h_goods
+        <set>
+            <if test="goodsName != null">`goods_name` = #{goodsName},</if>
+            <if test="goodsType != null">`goods_type` = #{goodsType},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="creator != null">`creator` = #{creator},</if>
+            <if test="modifyTime != null">`modify_time` = #{modifyTime},</if>
+            <if test="isValid != null">`is_valid` = #{isValid},</if>
+            <if test="modifier != null">`modifier` = #{modifier}</if>
+        </set>
+        where goods_id = #{goodsId}
+    </update>
+
+    <delete id="delete">
+        UPDATE h_goods SET is_valid=2 WHERE goods_id=#{value}
 -- 		delete from h_goods where goods_id = #{value}
 	</delete>
-	
-	<delete id="deleteBatch">
-		UPDATE h_goods SET is_valid=5 where goods_id in
-		<foreach item="goodsId" collection="array" open="(" separator="," close=")">
-			#{goodsId}
-		</foreach>
-	</delete>
-	<select id="queryHGoodsVoList" resultType="io.renren.modules.stock.vo.HGoodsVo">
-		select hg.*,su.username AS creatorName,su2.username AS modifierName from h_goods hg LEFT JOIN sys_user su ON hg.creator=su.user_id LEFT JOIN sys_user su2 ON su2.user_id=hg.modifier
-		WHERE
-		hg.is_valid=4
-		<if test="goodsType!=null and goodsType!=''">AND hg.goods_type = #{goodsType}</if>
-		<if test="goodsName!=null and goodsName!=''">AND hg.goods_name LIKE '%${goodsName}%'</if>
-		<choose>
-			<when test="sidx != null and sidx.trim() != ''">
-				order by ${sidx} ${order}
-			</when>
-			<otherwise>
-				order by hg.goods_id desc
-			</otherwise>
-		</choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
-		</if>
-	</select>
-	<select id="queryHGoodsVoTotal" resultType="int">
-		select count(*) from h_goods
-		WHERE
-		is_valid=4
-		<if test="goodsType!=null and goodsType!=''">AND goods_type = #{goodsType}</if>
-		<if test="goodsName!=null and goodsName!=''">AND goods_name LIKE '%${goodsName}%'</if>
+
+    <delete id="deleteBatch">
+        UPDATE h_goods SET is_valid=2 where goods_id in
+        <foreach item="goodsId" collection="array" open="(" separator="," close=")">
+            #{goodsId}
+        </foreach>
+    </delete>
+    <select id="queryHGoodsVoList" resultType="io.renren.modules.stock.vo.HGoodsVo">
+        select hg.*,su.username AS creatorName,su2.username AS modifierName from h_goods hg LEFT JOIN sys_user su ON
+        hg.creator=su.user_id LEFT JOIN sys_user su2 ON su2.user_id=hg.modifier
+        WHERE
+        hg.is_valid=1
+        <if test="goodsType!=null and goodsType!=''">AND hg.goods_type = #{goodsType}</if>
+        <if test="goodsName!=null and goodsName!=''">AND hg.goods_name LIKE '%${goodsName}%'</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by hg.goods_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryHGoodsVoTotal" resultType="int">
+        select count(*) from h_goods
+        WHERE
+        is_valid=1
+        <if test="goodsType!=null and goodsType!=''">AND goods_type = #{goodsType}</if>
+        <if test="goodsName!=null and goodsName!=''">AND goods_name LIKE '%${goodsName}%'</if>
+    </select>
+    <select id="queryAllHGoodsVoList" resultType="io.renren.modules.stock.vo.HGoodsVo">
+        select hg.*,su.username AS creatorName,su2.username AS modifierName from h_goods hg LEFT JOIN sys_user su ON
+        hg.creator=su.user_id LEFT JOIN sys_user su2 ON su2.user_id=hg.modifier
+        WHERE
+        hg.is_valid=1
 	</select>
 </mapper>

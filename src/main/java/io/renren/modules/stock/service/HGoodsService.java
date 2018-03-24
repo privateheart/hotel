@@ -32,4 +32,6 @@ public interface HGoodsService {
 	List<HGoodsVo> queryHGoodsVoList(Map<String,Object> map);
 
 	int queryHGoodsVoTotal(Map<String,Object> map);
+
+    List<HGoodsVo> queryAllHGoodsVoList();
 }

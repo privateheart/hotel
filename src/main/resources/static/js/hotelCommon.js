@@ -15,6 +15,9 @@ function hdicTypes() {
     })
 }
 
+/**
+ * 获取所有管理员
+ */
 function getAllUsers() {
     $.post(baseURL + "sys/user/queryAllSysUser", {}, function (r) {
         if (r.code == 0) {
@@ -27,4 +30,54 @@ function getAllUsers() {
             alert(r.msg);
         }
     })
+}
+
+/**
+ * 获取所有的
+ */
+function getAllHGoods() {
+    $.post(baseURL + "hgoods/queryAllHGoodsVos", {}, function (r) {
+        if (r.code == 0) {
+            var hGoodsVos = [];
+            for (var i = 0; i < r.hGoodsVos.length; i++) {
+                hGoodsVos[i] = {id: r.hGoodsVos[i].goodsId, text: r.hGoodsVos[i].goodsName};
+            }
+            vm.hGoodsVos = hGoodsVos;
+        } else {
+            alert(r.msg);
+        }
+    })
+}
+
+function dicFormatter(cellValue, options, rowObject) {
+    var dicName = '';
+    for (var i = 0; i < allDic.length; i++) {
+        if (allDic[i].dicId == cellValue) {
+            dicName = allDic[i].dicName;
+            break;
+        }
+    }
+    return dicName;
+}
+
+function userNameFormatter(cellValue, options, rowObject) {
+    var userName = '';
+    for (var i = 0; i < vm.sysUsers.length; i++) {
+        if (vm.sysUsers[i].id == cellValue) {
+            userName = vm.sysUsers[i].text;
+            break;
+        }
+    }
+    return userName;
+}
+
+function goodsNameFormatter(cellValue, options, rowObject) {
+    var goodsName = '';
+    for (var i = 0; i < vm.hGoodsVos.length; i++) {
+        if (vm.hGoodsVos[i].id == cellValue) {
+            goodsName = vm.hGoodsVos[i].text;
+            break;
+        }
+    }
+    return goodsName;
 }

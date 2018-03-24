@@ -4,8 +4,8 @@ $(function () {
         datatype: "json",
         colModel: [			
 			{ label: 'goodsId', name: 'goodsId', index: 'goods_id', width: 50, key: true},
-			{ label: '物品名称', name: 'goodsName', index: 'goods_name', width: 80 }, 			
-			{ label: '物品类型', name: 'goodsType', index: 'goods_type', width: 80 ,formatter:  goodsTypeFormatter},
+			{ label: '物品名称', name: 'goodsName', index: 'goods_name', width: 80 },
+            {label: '物品类型', name: 'goodsType', index: 'goods_type', width: 80, formatter: dicFormatter},
 			{ label: '创建时间', name: 'createTime', index: 'create_time', width: 80 }, 			
 			{ label: '创建人', name: 'creatorName', index: 'creator', width: 80 },
 			{ label: '修改时间', name: 'modifyTime', index: 'modify_time', width: 80 },
@@ -37,16 +37,7 @@ $(function () {
         }
     });
 });
-function goodsTypeFormatter(cellValue,options,rowObject){
-	console.log(cellValue);
-	console.log(options);
-	console.log(rowObject);
-	for(var i=0;i<allDic.length; i++){
-		if (allDic[i].dicType==2 && allDic[i].dicId==cellValue){
-			return allDic[i].dicName;
-		}
-	}
-}
+
 var vm = new Vue({
 	el:'#rrapp',
 	data:{

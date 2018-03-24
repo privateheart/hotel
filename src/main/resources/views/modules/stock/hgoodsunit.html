@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>物品表</title>
+    <title>物品--单位表 一个物品可以有多个单位</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
     <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../../css/select2.min.css">
     <script src="../../libs/jquery.min.js"></script>
     <script src="../../plugins/layer/layer.js"></script>
     <script src="../../libs/bootstrap.min.js"></script>
@@ -18,25 +19,18 @@
     <script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
     <script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
     <script src="../../js/common.js"></script>
+    <script type="text/javascript" src="../../libs/select2.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-            <div class="form-group col-sm-2">
-                <input type="text" class="form-control" v-model="q.goodsName" @keyup.enter="query" placeholder="物品名称">
-            </div>
-            <div class="form-group col-sm-2">
-                <select v-model="q.goodsType" class="form-control">
-                    <option value="">物品类型</option>
-                    <option v-for="item in goodsTypes" v-if="item.dicTypeId==2" :value="item.dicId">{{item.dicName}}</option>
-                </select>
-            </div>
             <a class="btn btn-default" @click="query">查询</a>
-            <a v-if="hasPermission('hgoods:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-            <a v-if="hasPermission('hgoods:update')" class="btn btn-primary" @click="update"><i
+            <a v-if="hasPermission('hgoodsunit:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a v-if="hasPermission('hgoodsunit:update')" class="btn btn-primary" @click="update"><i
                     class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            <a v-if="hasPermission('hgoods:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a v-if="hasPermission('hgoodsunit:delete')" class="btn btn-primary" @click="del"><i
+                    class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -46,16 +40,36 @@
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
             <div class="form-group">
-                <div class="col-sm-2 control-label">物品名称</div>
+                <div class="col-sm-2 control-label">物品Id</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hGoods.goodsName" placeholder="物品名称"/>
+                    <select2 :options="hGoodsVos" style="width: 200px" v-model="hGoodsUnit.goodsId"></select2>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">物品类型</div>
+                <div class="col-sm-2 control-label">单位</div>
                 <div class="col-sm-10">
-                    <select v-model="hGoods.goodsType" class="form-control">
-                        <option v-for="item in goodsTypes" v-if="item.dicTypeId==2" :value="item.dicId">{{item.dicName}}</option>
+                    <input type="text" class="form-control" v-model="hGoodsUnit.unit" placeholder="单位"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">换算率 {箱 x 换算率 = 瓶（标准单位）}</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="hGoodsUnit.conversionRate"
+                           placeholder="换算率 {箱 x 换算率 = 瓶（标准单位）}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">该单位下的 价格</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="hGoodsUnit.unitPrice" placeholder="该单位下的 价格"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">是否原子单位</div>
+                <div class="col-sm-10">
+                    <select v-model="hGoodsUnit.isAtomic" class="form-control">
+                        <option v-for="item in allDic" v-if="item.dicType==1" :value="item.dicId">{{item.dicName}}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -68,6 +82,6 @@
     </div>
 </div>
 <script src="../../js/hotelCommon.js"></script>
-<script src="../../js/modules/stock/hgoods.js"></script>
+<script src="../../js/modules/stock/hgoodsunit.js"></script>
 </body>
 </html>

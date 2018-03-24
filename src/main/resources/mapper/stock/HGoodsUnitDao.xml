@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.stock.dao.HGoodsUnitDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.stock.entity.HGoodsUnit" id="hGoodsUnitMap">
+        <result property="goodsUnitId" column="goods_unit_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="unit" column="unit"/>
+        <result property="conversionRate" column="conversion_rate"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="isAtomic" column="is_atomic"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="creator" column="creator"/>
+        <result property="modifier" column="modifier"/>
+        <result property="isValid" column="is_valid"/>
+    </resultMap>
+
+    <select id="queryObject" resultType="io.renren.modules.stock.entity.HGoodsUnit">
+        select * from h_goods_unit where goods_unit_id = #{value}
+    </select>
+
+    <select id="queryList" resultType="io.renren.modules.stock.entity.HGoodsUnit">
+        select * from h_goods_unit
+        WHERE is_valid=1
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by goods_unit_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from h_goods_unit WHERE is_valid=1
+    </select>
+
+    <insert id="save" parameterType="io.renren.modules.stock.entity.HGoodsUnit" useGeneratedKeys="true"
+            keyProperty="goodsUnitId">
+        insert into h_goods_unit
+        (
+        `goods_id`,
+        `unit`,
+        `conversion_rate`,
+        `unit_price`,
+        `is_atomic`,
+        `create_time`,
+        `modify_time`,
+        `creator`,
+        `modifier`,
+        `is_valid`
+        )
+        values
+        (
+        #{goodsId},
+        #{unit},
+        #{conversionRate},
+        #{unitPrice},
+        #{isAtomic},
+        #{createTime},
+        #{modifyTime},
+        #{creator},
+        #{modifier},
+        #{isValid}
+        )
+    </insert>
+
+    <update id="update" parameterType="io.renren.modules.stock.entity.HGoodsUnit">
+        update h_goods_unit
+        <set>
+            <if test="goodsId != null">`goods_id` = #{goodsId},</if>
+            <if test="unit != null">`unit` = #{unit},</if>
+            <if test="conversionRate != null">`conversion_rate` = #{conversionRate},</if>
+            <if test="unitPrice != null">`unit_price` = #{unitPrice},</if>
+            <if test="isAtomic != null">`is_atomic` = #{isAtomic},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="modifyTime != null">`modify_time` = #{modifyTime},</if>
+            <if test="creator != null">`creator` = #{creator},</if>
+            <if test="modifier != null">`modifier` = #{modifier},</if>
+            <if test="isValid != null">`is_valid` = #{isValid}</if>
+        </set>
+        where goods_unit_id = #{goodsUnitId}
+    </update>
+
+    <delete id="delete">
+        delete from h_goods_unit where goods_unit_id = #{value}
+    </delete>
+
+    <update id="deleteBatch">
+        UPDATE h_goods_unit SET is_valid = 2 where goods_unit_id in
+        <foreach item="goodsUnitId" collection="array" open="(" separator="," close=")">
+            #{goodsUnitId}
+        </foreach>
+    </update>
+    <select id="queryUnitsByGoodsId" resultType="io.renren.modules.stock.entity.HGoodsUnit">
+        SELECT * FROM h_goods_unit WHERE is_valid=1
+        <if test="goodsId!=null and goodsId !=''">AND goods_id=#{goodsId}</if>
+    </select>
+</mapper>

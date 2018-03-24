@@ -72,8 +72,8 @@ public class HRoomController extends AbstractController{
 	public R save(@RequestBody HRoom hRoom){
 		hRoom.setCreateTime(new Date());
 		hRoom.setCreator(getUser().getUserId().intValue());
-		hRoom.setIsValid(4);
-		hRoomService.save(hRoom);
+        hRoom.setIsValid(1);
+        hRoomService.save(hRoom);
 		return R.ok();
 	}
 	

@@ -80,11 +80,11 @@
 	</update>
 	
 	<update id="delete">
-		UPDATE h_room SET is_valid=5  where room_id = #{value}
+        UPDATE h_room SET is_valid=2 where room_id = #{value}
 	</update>
 	
 	<update id="deleteBatch">
-		UPDATE  h_room SET is_valid=5  where  room_id in
+        UPDATE h_room SET is_valid=2 where room_id in
 		<foreach item="roomId" collection="array" open="(" separator="," close=")">
 			#{roomId}
 		</foreach>
@@ -93,7 +93,7 @@
 	<select id="queryHRoomVoList" resultType="io.renren.modules.stock.vo.HRoomVo">
 		select hr.*,su.username AS creatorName,su2.username AS modifierName,su3.username AS custodianName from h_room hr LEFT JOIN sys_user su ON hr.creator=su.user_id LEFT JOIN sys_user su2 ON  su2.user_id=hr.modifier
 		LEFT JOIN sys_user su3 ON su3.user_id = hr.custodian
-		where hr.is_valid=4
+        where hr.is_valid=1
 		<choose>
 			<when test="sidx != null and sidx.trim() != ''">
 				order by ${sidx} ${order}
@@ -108,7 +108,7 @@
 	</select>
 
 	<select id="queryHRoomVoTotal" resultType="int">
-		select count(*) from h_room WHERE is_valid=4
+        select count(*) from h_room WHERE is_valid=1
 	</select>
 
 </mapper>

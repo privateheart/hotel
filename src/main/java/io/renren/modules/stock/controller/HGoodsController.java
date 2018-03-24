@@ -74,8 +74,8 @@ public class HGoodsController extends AbstractController {
 	public R save(@RequestBody HGoods hGoods){
 		hGoods.setCreateTime(new Date());
 		hGoods.setCreator(getUserId().intValue());
-		hGoods.setIsValid(4);//4 在字典表代表是否有效
-		hGoodsService.save(hGoods);
+        hGoods.setIsValid(1);//1 在字典表代表  是
+        hGoodsService.save(hGoods);
 		return R.ok();
 	}
 	
@@ -87,8 +87,8 @@ public class HGoodsController extends AbstractController {
 	public R update(@RequestBody HGoods hGoods){
 		hGoods.setModifyTime(new Date());
 		hGoods.setModifier(getUserId().intValue());
-		hGoods.setIsValid(4);//4 在字典表代表是否有效
-		hGoodsService.update(hGoods);
+        hGoods.setIsValid(1);//1 在字典表代表  是
+        hGoodsService.update(hGoods);
 		return R.ok();
 	}
 	
@@ -102,5 +102,13 @@ public class HGoodsController extends AbstractController {
 
 		return R.ok();
 	}
-	
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/queryAllHGoodsVos")
+    public R queryAllHGoodsVos() {
+        List<HGoodsVo> hGoodsVos = hGoodsService.queryAllHGoodsVoList();
+        return R.ok().put("hGoodsVos", hGoodsVos);
+    }
 }
