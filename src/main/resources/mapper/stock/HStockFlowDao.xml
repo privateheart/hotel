@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.stock.dao.HStockFlowDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.modules.stock.entity.HStockFlow" id="hStockFlowMap">
+        <result property="stockFlowId" column="stock_flow_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="roomId" column="room_id"/>
+        <result property="qty" column="qty"/>
+        <result property="goodsUnitId" column="goods_unit_id"/>
+        <result property="atomicQty" column="atomic_qty"/>
+        <result property="createTime" column="create_time"/>
+        <result property="creator" column="creator"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="modifier" column="modifier"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.modules.stock.entity.HStockFlow">
+		select * from h_stock_flow where stock_flow_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.modules.stock.entity.HStockFlow">
+		select * from h_stock_flow
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by stock_flow_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from h_stock_flow 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.modules.stock.entity.HStockFlow" useGeneratedKeys="true" keyProperty="stockFlowId">
+		insert into h_stock_flow
+		(
+			`goods_id`, 
+			`room_id`, 
+			`qty`, 
+			`goods_unit_id`, 
+			`atomic_qty`, 
+			`create_time`, 
+			`creator`, 
+			`modify_time`, 
+			`modifier`
+		)
+		values
+		(
+			#{goodsId}, 
+			#{roomId}, 
+			#{qty}, 
+			#{goodsUnitId}, 
+			#{atomicQty}, 
+			#{createTime}, 
+			#{creator}, 
+			#{modifyTime}, 
+			#{modifier}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.modules.stock.entity.HStockFlow">
+		update h_stock_flow 
+		<set>
+			<if test="goodsId != null">`goods_id` = #{goodsId}, </if>
+			<if test="roomId != null">`room_id` = #{roomId}, </if>
+			<if test="qty != null">`qty` = #{qty}, </if>
+			<if test="goodsUnitId != null">`goods_unit_id` = #{goodsUnitId}, </if>
+			<if test="atomicQty != null">`atomic_qty` = #{atomicQty}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="creator != null">`creator` = #{creator}, </if>
+			<if test="modifyTime != null">`modify_time` = #{modifyTime}, </if>
+			<if test="modifier != null">`modifier` = #{modifier}</if>
+		</set>
+		where stock_flow_id = #{stockFlowId}
+	</update>
+	
+	<delete id="delete">
+		delete from h_stock_flow where stock_flow_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from h_stock_flow where stock_flow_id in 
+		<foreach item="stockFlowId" collection="array" open="(" separator="," close=")">
+			#{stockFlowId}
+		</foreach>
+	</delete>
+
+</mapper>

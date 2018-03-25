@@ -62,4 +62,9 @@ public class HRoomServiceImpl implements HRoomService {
 	public int queryHRoomVoTotal(Map<String, Object> map) {
 		return hRoomDao.queryHRoomVoTotal(map);
 	}
+
+	@Override
+	public List<HRoomVo> queryAllRoomVoList() {
+		return hRoomDao.queryAllRoomVoList();
+	}
 }

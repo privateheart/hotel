@@ -3,6 +3,7 @@ package io.renren.modules.stock.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +52,13 @@ public class HGoodsStockServiceImpl implements HGoodsStockService {
         hGoodsStockDao.deleteBatch(goodsStockIds);
     }
 
+    @Override
+    public void updateQtyByStockFlow(BigDecimal qty, Integer goodsId) {
+        hGoodsStockDao.updateQtyByStockFlow(qty,goodsId);
+    }
+
+    @Override
+    public Integer queryGoodsStockExists(Integer goodsId) {
+        return hGoodsStockDao.queryGoodsStockExists(goodsId);
+    }
 }

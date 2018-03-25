@@ -4,7 +4,7 @@ $(function () {
         datatype: "json",
         colModel: [
             {label: 'goodsStockId', name: 'goodsStockId', index: 'goods_stock_id', width: 50, key: true},
-            {label: '物品id', name: 'goodsId', index: 'goods_id', width: 80},
+            {label: '物品', name: 'goodsId', index: 'goods_id', width: 80,formatter: goodsNameFormatter},
             {label: '数量(原子)', name: 'qty', index: 'qty', width: 80}
         ],
         viewrecords: true,
@@ -39,7 +39,8 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-        hGoodsStock: {}
+        hGoodsStock: {},
+        hGoodsVos: []
     },
     methods: {
         query: function () {
@@ -114,5 +115,8 @@ var vm = new Vue({
                 page: page
             }).trigger("reloadGrid");
         }
+    },
+    created:function () {
+        getAllHGoods();
     }
 });

@@ -33,7 +33,7 @@ function getAllUsers() {
 }
 
 /**
- * 获取所有的
+ * 获取所有的 物品
  */
 function getAllHGoods() {
     $.post(baseURL + "hgoods/queryAllHGoodsVos", {}, function (r) {
@@ -43,6 +43,39 @@ function getAllHGoods() {
                 hGoodsVos[i] = {id: r.hGoodsVos[i].goodsId, text: r.hGoodsVos[i].goodsName};
             }
             vm.hGoodsVos = hGoodsVos;
+        } else {
+            alert(r.msg);
+        }
+    })
+}
+
+/**
+ * 获取所有的 厅房
+ */
+function getAllHRooms() {
+    $.post(baseURL + "hroom/queryALlRooms", {}, function (r) {
+        if (r.code == 0) {
+            var hRoomVos = [];
+            for (var i = 0; i < r.hRoomVos.length; i++) {
+                hRoomVos[i] = {id: r.hRoomVos[i].roomId, text: r.hRoomVos[i].roomName};
+            }
+            vm.hRoomVos = hRoomVos;
+        } else {
+            alert(r.msg);
+        }
+    })
+}
+/**
+ * 获取 物品的所有单位
+ */
+function getGoodsUnit(goodsId) {
+    $.post(baseURL + "hgoodsunit/queryGoodsUnits", {goodsId:goodsId}, function (r) {
+        if (r.code == 0) {
+            var units = [];
+            for (var i = 0; i < r.units.length; i++) {
+                units[i] = {id: r.units[i].goodsUnitId, text: r.units[i].unit,conversionRate:r.units[i].conversionRate};
+            }
+            vm.units = units;
         } else {
             alert(r.msg);
         }

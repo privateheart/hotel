@@ -111,4 +111,7 @@
         select count(*) from h_room WHERE is_valid=1
 	</select>
 
+	<select id="queryAllRoomVoList" resultType="io.renren.modules.stock.vo.HRoomVo">
+		SELECT * FROM h_room WHERE is_valid=1
+	</select>
 </mapper>

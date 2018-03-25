@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>库存表</title>
+    <title>库存流动记录表</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
     <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../../css/select2.min.css">
     <script src="../../libs/jquery.min.js"></script>
     <script src="../../plugins/layer/layer.js"></script>
     <script src="../../libs/bootstrap.min.js"></script>
@@ -18,17 +19,17 @@
     <script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
     <script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
     <script src="../../js/common.js"></script>
+    <script type="text/javascript" src="../../libs/select2.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-            <a class="btn btn-default" @click="query">查询</a>
-        <!--    <a v-if="hasPermission('hgoodsstock:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-            <a v-if="hasPermission('hgoodsstock:update')" class="btn btn-primary" @click="update"><i
+            <a v-if="hasPermission('hstockflow:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a v-if="hasPermission('hstockflow:update')" class="btn btn-primary" @click="update"><i
                     class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            <a v-if="hasPermission('hgoodsstock:delete')" class="btn btn-primary" @click="del"><i
-                    class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+            <a v-if="hasPermission('hstockflow:delete')" class="btn btn-primary" @click="del"><i
+                    class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -38,15 +39,33 @@
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
             <div class="form-group">
-                <div class="col-sm-2 control-label">物品id</div>
+                <div class="col-sm-2 control-label">物品</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hGoodsStock.goodsId" placeholder="物品id"/>
+                    <select2 :options="hGoodsVos" style="width: 200px" v-model="hStockFlow.goodsId"></select2>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">数量(原子)</div>
+                <div class="col-sm-2 control-label">厅号</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hGoodsStock.qty" placeholder="数量(原子)"/>
+                    <select2 :options="hRoomVos" style="width: 200px" v-model="hStockFlow.roomId"></select2>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">进出数量</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="hStockFlow.qty" placeholder="进出数量"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">录入库存时的单位</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="hStockFlow.goodsUnitId" placeholder="录入库存时的单位"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">原子数量</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="hStockFlow.atomicQty" placeholder="原子数量"/>
                 </div>
             </div>
             <div class="form-group">
@@ -58,6 +77,6 @@
     </div>
 </div>
 <script src="../../js/hotelCommon.js"></script>
-<script src="../../js/modules/stock/hgoodsstock.js"></script>
+<script src="../../js/modules/stock/hstockflow.js"></script>
 </body>
 </html>

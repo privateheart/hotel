@@ -67,4 +67,11 @@
         </foreach>
     </delete>
 
+    <update id="updateQtyByStockFlow">
+        UPDATE h_goods_stock SET qty=qty+#{flowQty} WHERE goods_id=#{goodsId}
+    </update>
+
+    <select id="queryGoodsStockExists" resultType="java.lang.Integer">
+        select count(*) from h_goods_stock WHERE goods_id=#{goodsId};
+    </select>
 </mapper>

@@ -98,5 +98,10 @@ public class HRoomController extends AbstractController{
 		hRoomService.deleteBatch(roomIds);
 		return R.ok();
 	}
-	
+
+	@RequestMapping("/queryALlRooms")
+	public R queryAllRooms(){
+		List<HRoomVo> hRoomVos = hRoomService.queryAllRoomVoList();
+		return R.ok().put("hRoomVos",hRoomVos);
+	}
 }
