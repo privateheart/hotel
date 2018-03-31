@@ -3,6 +3,7 @@ package io.renren.modules.stock.service.impl;
 import io.renren.modules.stock.dao.HGoodsStockDao;
 import io.renren.modules.stock.entity.HGoodsStock;
 import io.renren.modules.stock.service.HGoodsStockService;
+import io.renren.modules.stock.vo.HStockFlowVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,8 @@ public class HStockFlowServiceImpl implements HStockFlowService {
 			HGoodsStock hGoodsStock = new HGoodsStock();
 			hGoodsStock.setGoodsId(hStockFlow.getGoodsId());
 			hGoodsStock.setQty(BigDecimal.ZERO);
-		}
+            hGoodsStockDao.save(hGoodsStock);
+        }
 		//修改库存数量
 		BigDecimal atomicQty = hStockFlow.getAtomicQty();
 		hGoodsStockDao.updateQtyByStockFlow(atomicQty,hStockFlow.getGoodsId());
@@ -74,5 +76,14 @@ public class HStockFlowServiceImpl implements HStockFlowService {
 	public void deleteBatch(Integer[] stockFlowIds){
 		hStockFlowDao.deleteBatch(stockFlowIds);
 	}
-	
+
+    @Override
+    public List<HStockFlowVo> queryStockFlowVoList(Map<String, Object> map) {
+        return hStockFlowDao.queryStockFlowVoList(map);
+    }
+
+    @Override
+    public int queryStockFlowVoTotal(Map<String, Object> map) {
+        return hStockFlowDao.queryStockFlowVoTotal(map);
+    }
 }

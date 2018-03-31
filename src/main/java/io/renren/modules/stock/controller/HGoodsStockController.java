@@ -3,6 +3,7 @@ package io.renren.modules.stock.controller;
 import java.util.List;
 import java.util.Map;
 
+import io.renren.modules.stock.vo.HGoodsStockVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,10 +41,9 @@ public class HGoodsStockController {
         //查询列表数据
         Query query = new Query(params);
 
-        List<HGoodsStock> hGoodsStockList = hGoodsStockService.queryList(query);
-        int total = hGoodsStockService.queryTotal(query);
-
-        PageUtils pageUtil = new PageUtils(hGoodsStockList, total, query.getLimit(), query.getPage());
+        List<HGoodsStockVo> hGoodsStockVos = hGoodsStockService.queryHGoodsStockVoList(query);
+        int total = hGoodsStockService.queryHGoodsStockVoListTotal(query);
+        PageUtils pageUtil = new PageUtils(hGoodsStockVos, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }

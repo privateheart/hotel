@@ -33,6 +33,25 @@
         select count(*) from h_goods_stock
     </select>
 
+    <select id="queryHGoodsStockVoList" resultType="io.renren.modules.stock.vo.HGoodsStockVo">
+        select hgs.*,hgu.unit AS atomicUnit from h_goods_stock hgs LEFT JOIN h_goods_unit hgu ON
+        hgs.goods_id=hgu.goods_id AND hgu.is_atomic=1
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by hgs.goods_stock_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="queryHGoodsStockVoListTotal" resultType="int">
+        select count(*) from h_goods_stock
+    </select>
+
     <insert id="save" parameterType="io.renren.modules.stock.entity.HGoodsStock" useGeneratedKeys="true"
             keyProperty="goodsStockId">
         insert into h_goods_stock

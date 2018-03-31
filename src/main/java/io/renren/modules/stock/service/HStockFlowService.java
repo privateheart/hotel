@@ -1,6 +1,7 @@
 package io.renren.modules.stock.service;
 
 import io.renren.modules.stock.entity.HStockFlow;
+import io.renren.modules.stock.vo.HStockFlowVo;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,20 @@ public interface HStockFlowService {
 	void delete(Integer stockFlowId);
 	
 	void deleteBatch(Integer[] stockFlowIds);
+
+    /**
+     * 查询 库存流动Vo
+     *
+     * @param map
+     * @return
+     */
+    List<HStockFlowVo> queryStockFlowVoList(Map<String, Object> map);
+
+    /**
+     * 查询 库存流动总条数
+     *
+     * @param map
+     * @return
+     */
+    int queryStockFlowVoTotal(Map<String, Object> map);
 }

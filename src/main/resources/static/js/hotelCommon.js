@@ -73,7 +73,12 @@ function getGoodsUnit(goodsId) {
         if (r.code == 0) {
             var units = [];
             for (var i = 0; i < r.units.length; i++) {
-                units[i] = {id: r.units[i].goodsUnitId, text: r.units[i].unit,conversionRate:r.units[i].conversionRate};
+                units[i] = {
+                    id: r.units[i].goodsUnitId,
+                    text: r.units[i].unit,
+                    conversionRate: r.units[i].conversionRate,
+                    isAtomic: r.units[i].isAtomic
+                };
             }
             vm.units = units;
         } else {

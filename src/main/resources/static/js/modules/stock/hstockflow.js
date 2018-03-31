@@ -6,11 +6,12 @@ $(function () {
 			{ label: 'stockFlowId', name: 'stockFlowId', index: 'stock_flow_id', width: 50, key: true },
 			{ label: '物品', name: 'goodsId', index: 'goods_id', width: 80,formatter: goodsNameFormatter },
 			{ label: '厅号id', name: 'roomId', index: 'room_id', width: 80 }, 			
-			{ label: '进出数量', name: 'qty', index: 'qty', width: 80 }, 			
-			{ label: '录入库存时的单位', name: 'goodsUnitId', index: 'goods_unit_id', width: 80 }, 			
-			{ label: '原子数量', name: 'atomicQty', index: 'atomic_qty', width: 80 }, 			
-			{ label: '操作时间', name: 'createTime', index: 'create_time', width: 80 }, 			
-			{ label: '操作人', name: 'creator', index: 'creator', width: 80 }, 			
+			{ label: '进出数量', name: 'qty', index: 'qty', width: 80 },
+            {label: '进出库存时的单位', name: 'flowUnit', index: 'flowUnit', width: 80},
+			{ label: '原子数量', name: 'atomicQty', index: 'atomic_qty', width: 80 },
+            {label: '原子单位', name: 'atomicUnit', index: 'atomicUnit', width: 80},
+            {label: '操作时间', name: 'createTime', index: 'create_time', width: 80},
+            {label: '操作人', name: 'creator', index: 'creator', width: 80, formatter: userNameFormatter},
 			{ label: '', name: 'modifyTime', index: 'modify_time', width: 80 }, 			
 			{ label: '', name: 'modifier', index: 'modifier', width: 80 }			
         ],
@@ -46,9 +47,14 @@ var vm = new Vue({
 	data:{
 		showList: true,
 		title: null,
-		hStockFlow: {},
+        hStockFlow: {
+            goodsId: 0
+        },
         hGoodsVos:[],
-        hRoomVos:[]
+        hRoomVos: [],
+        sysUsers: [],
+        units: [],
+        atomUnit: ""
 	},
 	methods: {
 		query: function () {
@@ -92,7 +98,6 @@ var vm = new Vue({
 			if(stockFlowIds == null){
 				return ;
 			}
-			
 			confirm('确定要删除选中的记录？', function(){
 				$.ajax({
 					type: "POST",
@@ -122,9 +127,40 @@ var vm = new Vue({
 			$("#jqGrid").jqGrid('setGridParam',{ 
                 page:page
             }).trigger("reloadGrid");
-		}
+        },
+        computeAtomQty: function () {
+            for (var i = 0; i < vm.units.length; i++) {
+                if (vm.units[i].id == vm.hStockFlow.goodsUnitId) {
+                    vm.$set(vm.hStockFlow, 'atomicQty', vm.units[i].conversionRate * vm.hStockFlow.qty);
+                    break;
+                }
+            }
+        },
+        getUnits: function () {
+            getGoodsUnit(vm.hStockFlow.goodsId);
+            vm.initQty();
+        },
+        initQty: function () {
+            vm.$set(vm.hStockFlow, 'atomicQty', 0);
+            vm.$set(vm.hStockFlow, 'qty', 0);
+        }/*,
+        changeGoods:function () {
+			var goodsId = vm.hStockFlow.goodsId;
+			vm.units = getGoodsUnit(goodsId);
+        }*/
+    },
+    watch: {
+        'units': function (val, oldVal) {
+            for (var i = 0; i < vm.units.length; i++) {
+                if (vm.units[i].isAtomic == 1) {
+                    vm.atomUnit = vm.units[i].text;
+                    break;
+                }
+            }
+        }
 	},
 	created:function () {
+        getAllUsers();
 		getAllHGoods();
         getAllHRooms();
     }

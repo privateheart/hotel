@@ -1,6 +1,7 @@
 package io.renren.modules.stock.service;
 
 import io.renren.modules.stock.entity.HGoodsStock;
+import io.renren.modules.stock.vo.HGoodsStockVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -38,4 +39,20 @@ public interface HGoodsStockService {
      * @return
      */
     Integer queryGoodsStockExists(Integer goodsId);
+
+    /**
+     * 查询 库存列表
+     *
+     * @param map
+     * @return
+     */
+    List<HGoodsStockVo> queryHGoodsStockVoList(Map<String, Object> map);
+
+    /**
+     * 查询 库存列表总条数
+     *
+     * @param map
+     * @return
+     */
+    int queryHGoodsStockVoListTotal(Map<String, Object> map);
 }

@@ -131,8 +131,12 @@ Vue.component('select2', {
             .trigger('change')
             // emit event on change.
             .on('change', function () {
-                vm.$emit('input', this.value)
+                vm.$emit('input', this.value);
+                // vm.$emit('select'); 会执行两次
             })
+        $(this.$el).on('select2:select', function () {
+            vm.$emit('select')
+        })
     },
     watch: {
         value: function (value) {

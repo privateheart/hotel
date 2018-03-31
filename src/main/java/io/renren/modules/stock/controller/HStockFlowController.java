@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import io.renren.modules.stock.vo.HStockFlowVo;
 import io.renren.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,8 @@ public class HStockFlowController extends AbstractController{
 		//查询列表数据
         Query query = new Query(params);
 
-		List<HStockFlow> hStockFlowList = hStockFlowService.queryList(query);
-		int total = hStockFlowService.queryTotal(query);
-		
+		List<HStockFlowVo> hStockFlowList = hStockFlowService.queryStockFlowVoList(query);
+		int total = hStockFlowService.queryStockFlowVoTotal(query);
 		PageUtils pageUtil = new PageUtils(hStockFlowList, total, query.getLimit(), query.getPage());
 		
 		return R.ok().put("page", pageUtil);

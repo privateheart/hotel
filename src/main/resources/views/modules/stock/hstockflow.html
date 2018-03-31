@@ -41,7 +41,8 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">物品</div>
                 <div class="col-sm-10">
-                    <select2 :options="hGoodsVos" style="width: 200px" v-model="hStockFlow.goodsId"></select2>
+                    <select2 :options="hGoodsVos" style="width: 200px" v-model="hStockFlow.goodsId"
+                             @select="getUnits"></select2>
                 </div>
             </div>
             <div class="form-group">
@@ -53,19 +54,24 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">进出数量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hStockFlow.qty" placeholder="进出数量"/>
+                    <input type="text" class="form-control" v-model="hStockFlow.qty" @input="computeAtomQty"
+                           placeholder="进出数量"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">录入库存时的单位</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hStockFlow.goodsUnitId" placeholder="录入库存时的单位"/>
+                    <select v-model="hStockFlow.goodsUnitId" class="form-control" @change="initQty">
+                        <option class="form-control" v-for="item in units" :value="item.id">{{item.text}}</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" v-model="hStockFlow.goodsUnitId" placeholder="录入库存时的单位"/>-->
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">原子数量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="hStockFlow.atomicQty" placeholder="原子数量"/>
+                    <input type="text" class="form-control" v-model="hStockFlow.atomicQty" placeholder="原子数量" disabled/>
+                    <p class="text-right">{{atomUnit}}</p>
                 </div>
             </div>
             <div class="form-group">

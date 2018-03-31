@@ -39,7 +39,28 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from h_stock_flow 
 	</select>
-	 
+
+	<select id="queryStockFlowVoList" resultType="io.renren.modules.stock.vo.HStockFlowVo">
+		select hsf.*,hgu.unit AS flowUnit,hgu1.unit AS atomicUnit from h_stock_flow hsf LEFT JOIN h_goods_unit hgu ON
+		hsf.goods_unit_id = hgu.goods_unit_id LEFT JOIN h_goods_unit hgu1 ON hsf.goods_id=hgu1.goods_id AND
+		hgu1.is_atomic=1
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by hsf.stock_flow_id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryStockFlowVoTotal" resultType="int">
+		select count(*) from h_stock_flow
+	</select>
+
 	<insert id="save" parameterType="io.renren.modules.stock.entity.HStockFlow" useGeneratedKeys="true" keyProperty="stockFlowId">
 		insert into h_stock_flow
 		(

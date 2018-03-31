@@ -5,7 +5,8 @@ $(function () {
         colModel: [
             {label: 'goodsStockId', name: 'goodsStockId', index: 'goods_stock_id', width: 50, key: true},
             {label: '物品', name: 'goodsId', index: 'goods_id', width: 80,formatter: goodsNameFormatter},
-            {label: '数量(原子)', name: 'qty', index: 'qty', width: 80}
+            {label: '数量(原子)', name: 'qty', index: 'qty', width: 80},
+            {label: '原子单位', name: 'atomicUnit', index: 'atomicUnit', width: 80}
         ],
         viewrecords: true,
         height: 385,

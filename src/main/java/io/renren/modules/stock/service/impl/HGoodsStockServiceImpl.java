@@ -1,5 +1,6 @@
 package io.renren.modules.stock.service.impl;
 
+import io.renren.modules.stock.vo.HGoodsStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,15 @@ public class HGoodsStockServiceImpl implements HGoodsStockService {
     @Override
     public Integer queryGoodsStockExists(Integer goodsId) {
         return hGoodsStockDao.queryGoodsStockExists(goodsId);
+    }
+
+    @Override
+    public List<HGoodsStockVo> queryHGoodsStockVoList(Map<String, Object> map) {
+        return hGoodsStockDao.queryHGoodsStockVoList(map);
+    }
+
+    @Override
+    public int queryHGoodsStockVoListTotal(Map<String, Object> map) {
+        return hGoodsStockDao.queryHGoodsStockVoListTotal(map);
     }
 }
