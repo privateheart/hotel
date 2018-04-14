@@ -23,4 +23,12 @@ public interface HGoodsUnitDao extends BaseDao<HGoodsUnit> {
      * @return
      */
     List<HGoodsUnit> queryUnitsByGoodsId(@Param("goodsId") Integer goodsId);
+
+    /**
+     * 根据 物品 id 查询原子单位个数  大于0则不可以新增
+     *
+     * @param goodsId
+     * @return
+     */
+    Integer checkAtomUnitCount(@Param("goodsId") Integer goodsId);
 }

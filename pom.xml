@@ -5,7 +5,7 @@
 	<groupId>io.heart</groupId>
 	<artifactId>hotel-fast</artifactId>
 	<version>1.2.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<description>hotel-fast</description>
 
 	<parent>
